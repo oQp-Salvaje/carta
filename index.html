@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti ❤️</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Georgia, 'Times New Roman', serif;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(255, 120, 160, .18), transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(255, 80, 130, .15), transparent 30%),
+                linear-gradient(135deg, #160912, #2b0d1c, #12060d);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Fondo de corazones */
+        .hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            color: #ff668f;
+            font-size: 20px;
+            opacity: .7;
+            animation: subir linear infinite;
+        }
+
+        @keyframes subir {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: .8;
+            }
+
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Pantalla inicial */
+        .inicio {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 3, 8, .96);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .inicio.oculto {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .inicio-contenido {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .corazon-grande {
+            font-size: 90px;
+            animation: latido 1.4s infinite;
+            filter: drop-shadow(0 0 20px #ff386d);
+        }
+
+        @keyframes latido {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.18);
+            }
+        }
+
+        .inicio h1 {
+            margin: 20px 0 10px;
+            font-size: clamp(2rem, 6vw, 4rem);
+            color: #ffb3c7;
+        }
+
+        .inicio p {
+            color: #e8c8d2;
+            margin-bottom: 30px;
+        }
+
+        button {
+            border: none;
+            padding: 15px 32px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff477e, #d91e54);
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 50, 100, .35);
+            transition: .3s;
+        }
+
+        button:hover {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 12px 30px rgba(255, 50, 100, .5);
+        }
+
+        /* Contenido */
+        main {
+            position: relative;
+            z-index: 1;
+            width: min(900px, 92%);
+            margin: auto;
+            padding: 70px 0;
+        }
+
+        .titulo {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .titulo .mini-corazon {
+            font-size: 35px;
+        }
+
+        .titulo h1 {
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            color: #ffb7c9;
+            text-shadow: 0 0 25px rgba(255, 80, 130, .4);
+        }
+
+        .titulo p {
+            margin-top: 10px;
+            color: #d9b7c2;
+            font-style: italic;
+            font-size: 18px;
+        }
+
+        /* Carta */
+        .carta {
+            background: rgba(255, 245, 248, .96);
+            color: #3b1725;
+            border-radius: 20px;
+            padding: clamp(25px, 6vw, 60px);
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, .45),
+                0 0 50px rgba(255, 60, 110, .08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carta::before {
+            content: "♥";
+            position: absolute;
+            top: -30px;
+            right: 20px;
+            font-size: 170px;
+            color: rgba(255, 100, 140, .06);
+        }
+
+        .saludo {
+            font-size: 28px;
+            color: #b51e50;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .carta p {
+            font-family: Georgia, serif;
+            font-size: 18px;
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .destacado {
+            margin: 35px 0;
+            padding: 25px;
+            border-left: 4px solid #e83e6b;
+            background: rgba(255, 190, 210, .15);
+            font-size: 22px;
+            line-height: 1.7;
+            font-style: italic;
+            color: #8e2147;
+        }
+
+        .firma {
+            text-align: right;
+            margin-top: 40px;
+            font-size: 22px;
+            color: #a51d4b;
+            font-style: italic;
+        }
+
+        /* Frases */
+        .seccion {
+            margin-top: 70px;
+            text-align: center;
+        }
+
+        .seccion h2 {
+            font-size: 35px;
+            color: #ffb5c8;
+            margin-bottom: 30px;
+        }
+
+        .frases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px;
+        }
+
+        .frase {
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 160, 190, .18);
+            border-radius: 18px;
+            padding: 25px;
+            backdrop-filter: blur(8px);
+            transition: .3s;
+        }
+
+        .frase:hover {
+            transform: translateY(-7px);
+            background: rgba(255, 100, 140, .12);
+        }
+
+        .frase span {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .frase p {
+            line-height: 1.6;
+            color: #f0dce2;
+        }
+
+        /* Poema */
+        .poema {
+            background: linear-gradient(
+                145deg,
+                rgba(255, 255, 255, .08),
+                rgba(255, 90, 130, .08)
+            );
+            border: 1px solid rgba(255, 170, 195, .2);
+            padding: clamp(30px, 6vw, 55px);
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .2);
+        }
+
+        .poema p {
+            color: #f3dfe5;
+            line-height: 2;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .verso-especial {
+            color: #ffabc2 !important;
+            font-size: 23px !important;
+            font-style: italic;
+            margin: 35px 0 !important;
+        }
+
+        /* Final */
+        .final {
+            text-align: center;
+            padding: 90px 20px 30px;
+        }
+
+        .final .corazon {
+            font-size: 65px;
+            animation: latido 1.5s infinite;
+        }
+
+        .final h2 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            color: #ffb4c9;
+            margin: 20px 0;
+        }
+
+        .final p {
+            color: #d9c1c9;
+            font-size: 18px;
+        }
+
+        footer {
+            text-align: center;
+            color: #876d77;
+            padding: 30px;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .carta p {
+                font-size: 16px;
+            }
+
+            .poema p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Corazones flotando -->
+    <div class="hearts" id="hearts"></div>
+
+    <!-- Pantalla inicial -->
+    <section class="inicio" id="inicio">
+
+        <div class="inicio-contenido">
+
+            <div class="corazon-grande">❤️</div>
+
+            <h1>Una carta para ti</h1>
+
+            <p>
+                Hay cosas que no siempre se pueden decir con palabras...
+                pero hoy quiero intentarlo.
+            </p>
+
+            <button onclick="abrirCarta()">
+                Abrir mi carta 💌
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <main>
+
+        <!-- Título -->
+        <header class="titulo">
+
+            <div class="mini-corazon">♡</div>
+
+            <h1>Para ti</h1>
+
+            <p>
+                Para esa persona que hace que algunos momentos sean especiales.
+            </p>
+
+        </header>
+
+
+        <!-- Carta principal -->
+        <article class="carta">
+
+            <div class="saludo">
+                Para ti, alguien muy especial ❤️
+            </div>
+
+            <p>
+                No sé exactamente en qué momento una persona puede comenzar
+                a ocupar un lugar tan bonito en el corazón, pero sé que hay
+                personas que llegan y hacen que todo se sienta un poco diferente.
+            </p>
+
+            <p>
+                Esta carta es para ti, porque mereces saber que eres una
+                persona especial. Tal vez las palabras nunca sean suficientes
+                para expresar todo lo que uno siente, pero aun así vale la pena
+                intentarlo.
+            </p>
+
+            <div class="destacado">
+                "De todas las casualidades que puede traer la vida,
+                encontrarte fue una de esas que me gustaría conservar
+                para siempre."
+            </div>
+
+            <p>
+                Me gusta pensar que existen personas que aparecen en nuestra
+                vida para dejarnos recuerdos, enseñanzas y momentos que
+                permanecen incluso cuando el tiempo pasa.
+            </p>
+
+            <p>
+                Y si pudiera elegir una sola cosa para decirte hoy,
+                sería sencilla:
+            </p>
+
+            <div class="destacado">
+                Te amo por ser tú, por tu forma de ser, por tu manera de
+                iluminar los momentos y por todo aquello que te hace
+                diferente y especial.
+            </div>
+
+            <p>
+                No necesitas ser perfecta o perfecto para ser especial.
+                Precisamente esas pequeñas cosas que te hacen ser tú son
+                las que hacen que alguien pueda admirarte, apreciarte
+                y guardar un cariño enorme por ti.
+            </p>
+
+            <p>
+                Espero que nunca olvides lo importante que eres.
+                Que nunca dejes de perseguir tus sueños, que sigas creciendo,
+                aprendiendo y descubriendo todo lo bonito que la vida todavía
+                tiene preparado para ti.
+            </p>
+
+            <p>
+                Y si algún día dudas de ti, recuerda que hay personas capaces
+                de ver algo maravilloso en ti incluso cuando tú no logras verlo.
+            </p>
+
+            <div class="firma">
+                Con mucho amor,<br>
+                alguien que piensa en ti ❤️
+            </div>
+
+        </article>
+
+
+        <!-- Frases -->
+        <section class="seccion">
+
+            <h2>Unas palabras para ti ✨</h2>
+
+            <div class="frases">
+
+                <div class="frase">
+                    <span>❤️</span>
+                    <p>
+                        Te amo por todo aquello que eres,
+                        por lo que haces y por la persona que llevas dentro.
+                    </p>
+                </div>
+
+                <div class="frase">
+                    <span>🌹</span>
+                    <p>
+                        Si pudiera guardar un momento para siempre,
+                        elegiría uno en el que estuvieras sonriendo.
+                    </p>
+                </div>
+
+                <div class="frase">
+                    <span>✨</span>
+                    <p>
+                        Hay personas bonitas y después están aquellas
+                        que hacen bonito cualquier lugar donde están.
+                    </p>
+                </div>
+
+                <div class="frase">
+                    <span>🌙</span>
+                    <p>
+                        Incluso las noches más oscuras tienen una luz,
+                        y algunas personas son esa luz para nosotros.
+                    </p>
+                </div>
+
+                <div class="frase">
+                    <span>💌</span>
+                    <p>
+                        No hace falta una fecha especial para decirle
+                        a alguien lo mucho que significa.
+                    </p>
+                </div>
+
+                <div class="frase">
+                    <span>🫶</span>
+                    <p>
+                        Ojalá nunca olvides que eres alguien digno
+                        de amor, respeto, alegría y cosas bonitas.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Poema -->
+        <section class="seccion">
+
+            <h2>Un poema para ti 🌹</h2>
+
+            <div class="poema">
+
+                <p>
+                    Para ti, que llegaste sin avisar,<br>
+                    para ti, que aprendí poco a poco a admirar,<br>
+                    para ti, que tienes una forma especial<br>
+                    de convertir un instante sencillo<br>
+                    en un recuerdo difícil de olvidar.
+                </p>
+
+                <p>
+                    Para ti escribo estas palabras,<br>
+                    aunque sé que ninguna frase<br>
+                    podría explicar completamente<br>
+                    todo aquello que mi corazón guarda<br>
+                    cuando piensa en ti.
+                </p>
+
+                <p>
+                    Porque eres especial,<br>
+                    no por ser diferente a los demás,<br>
+                    sino por ser simplemente tú;<br>
+                    por tus pequeñas maneras,<br>
+                    por tus sonrisas,<br>
+                    por tus sueños,<br>
+                    por tus defectos y virtudes,<br>
+                    por cada detalle que te hace único.
+                </p>
+
+                <p>
+                    Si el cielo tuviera una historia,<br>
+                    quizá escribiría tu nombre entre las estrellas;<br>
+                    y si el tiempo pudiera detenerse,<br>
+                    guardaría algunos momentos<br>
+                    para poder volver a vivirlos.
+                </p>
+
+                <p class="verso-especial">
+                    Te amo no solamente por los momentos bonitos,<br>
+                    sino también por todo aquello que hace que seas tú.
+                </p>
+
+                <p>
+                    Te amo en la calma de una tarde,<br>
+                    en la tranquilidad de una noche,<br>
+                    en los pequeños detalles,<br>
+                    en las palabras inesperadas<br>
+                    y en esos momentos que parecen simples<br>
+                    pero terminan significándolo todo.
+                </p>
+
+                <p>
+                    Ojalá la vida te regale caminos llenos de sueños,<br>
+                    personas que sepan valorarte,<br>
+                    momentos que te hagan sonreír<br>
+                    y razones suficientes para nunca dejar de avanzar.
+                </p>
+
+                <p>
+                    Y si alguna vez preguntas<br>
+                    qué lugar ocupas en mi corazón,<br>
+                    quizá no exista una medida exacta,<br>
+                    porque hay sentimientos que no caben<br>
+                    en números, palabras ni explicaciones.
+                </p>
+
+                <p>
+                    Solo puedo decirte esto:
+                </p>
+
+                <p class="verso-especial">
+                    Eres especial.<br>
+                    Eres importante.<br>
+                    Eres alguien que merece ser amado.<br>
+                    Y sí...<br>
+                    Te amo. ❤️
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- Final -->
+        <section class="final">
+
+            <div class="corazon">❤️</div>
+
+            <h2>Siempre recuerda esto</h2>
+
+            <p>
+                Hay personas que pasan por nuestra vida...
+                y hay personas que dejan una huella.
+            </p>
+
+            <p style="margin-top: 15px;">
+                Tú eres una de esas personas especiales.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        Hecho con ❤️ y muchas palabras bonitas.
+    </footer>
+
+
+    <script>
+
+        // Abrir carta
+        function abrirCarta() {
+
+            const inicio = document.getElementById("inicio");
+
+            inicio.classList.add("oculto");
+
+        }
+
+
+        // Crear corazones flotantes
+        const hearts = document.getElementById("hearts");
+
+        const simbolos = ["❤️", "♡", "♥", "💗", "💖", "💕"];
+
+        function crearCorazon() {
+
+            const heart = document.createElement("div");
+
+            heart.classList.add("heart");
+
+            heart.innerHTML =
+                simbolos[Math.floor(Math.random() * simbolos.length)];
+
+            heart.style.left = Math.random() * 100 + "%";
+
+            heart.style.fontSize =
+                (12 + Math.random() * 25) + "px";
+
+            heart.style.animationDuration =
+                (6 + Math.random() * 8) + "s";
+
+            heart.style.animationDelay =
+                Math.random() * 3 + "s";
+
+            hearts.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 15000);
+        }
+
+
+        // Crear corazones continuamente
+        setInterval(crearCorazon, 500);
+
+
+        // Crear algunos inmediatamente
+        for (let i = 0; i < 15; i++) {
+            setTimeout(crearCorazon, i * 200);
+        }
+
+    </script>
+
+</body>
+</html>
